@@ -1,5 +1,7 @@
 # vue-firebase
 
+Dont forget paste your firebase config file in `src/plugins/firebase.js.local` and rename it to `firebase.js`
+
 ## Project setup
 ```
 npm install

@@ -1,0 +1,10 @@
+import * as firebase from 'firebase/app'
+import 'firebase/firebase-auth'
+
+const firebaseConfig = {
+    // Copy your credentials here and rename this file to firebase.js
+  };
+
+firebase.initializeApp(firebaseConfig);
+
+export default firebase

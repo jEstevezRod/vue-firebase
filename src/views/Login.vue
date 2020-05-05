@@ -2,66 +2,89 @@
   <div class="container mx-auto">
     <h1 class="text-center text-2xl mt-10">Login</h1>
     <div class="flex justify-center">
-      <form class="max-w-screen-sm" @submit.prevent="login">
-        <section class="flex flex-col justify-center items-center">
-          <div class="my-3">
-            <label class="block text-gray-700 text-sm font-bold mb-2" for="username">Email</label>
-            <input
-              class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              id="email"
-              type="text"
-              placeholder="Email"
-              name="email"
-              v-model="email"
-            />
+      <section class="flex flex-col justify-center items-center w-full">
+        <div class="my-3 w-2/3 lg:w-1/3">
+          <label class="block text-gray-700 mb-2" for="username">Email</label>
+          <input
+            class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            id="email"
+            type="text"
+            placeholder="example@domain.com"
+            name="email"
+            v-model="email"
+          />
+        </div>
+        <div class="my-3 w-2/3 lg:w-1/3">
+          <label class="block text-gray-700 mb-2" for="password">Password</label>
+          <input
+            class="appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+            id="password"
+            type="password"
+            name="password"
+            v-model="password"
+            placeholder="************"
+            @keydown.enter="login"
+          />
+        </div>
+        <div v-if="error" class="mb-6">
+          <div class="bg-red-200 rounded px-3 py-4">
+            <p class="text-red-400">{{error.message}}</p>
           </div>
-          <div class="my-3">
-            <label class="block text-gray-700 text-sm font-bold mb-2" for="password">Password</label>
-            <input
-              class="appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
-              id="password"
-              type="password"
-              name="password"
-              v-model="password"
-              placeholder="******************"
-            />
-          </div>
-          <div class="flex items-center justify-between w-full">
-            <button
-              class="bg-green-400 hover:bg-green-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-              type="submit"
-            >Sign In</button>
-            <router-link
-              class="inline-block align-baseline text-sm text-black hover:text-green-400"
-              to="/register"
-            >Not account yet? Sign up</router-link>
-          </div>
-        </section>
-      </form>
+        </div>
+        <div v-if="!loading" class="flex items-center justify-between w-2/3 lg:w-1/3">
+          <button
+            class="bg-green-400 hover:bg-green-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            @click="login"
+          >Sign In</button>
+          <router-link
+            class="inline-block align-baseline text-sm text-black hover:text-green-400"
+            to="/register"
+          >Not account yet? Sign up</router-link>
+        </div>
+        <div v-else class="w-2/3 lg:w-1/3 bg-blue-200 rounded px-3 py-4">
+          <p class="text-md text-blue-800">Loading...</p>
+        </div>
+      </section>
     </div>
   </div>
 </template>
 
 <script>
-import firebase from "firebase";
-
 export default {
   data: () => ({
     email: "",
-    password: ""
+    password: "",
+    loading: false,
+    error: null
   }),
   methods: {
     login() {
-      firebase
-        .auth()
-        .signInWithEmailAndPassword(this.email, this.password)
-        .then( res => console.log(res))
-        .catch(function(error) {
-          // Handle Errors here.
-          console.error(error.code);
-          console.error(error.message);
-          // ...
-        });
+      this.loading = true;
+      this.error = null;
+      this.$store
+        .dispatch("login", {
+          email: this.email,
+          password: this.password
+        })
+        .then(() => {
+          this.$notify({
+            message: "Login successfully!",
+            type: "success",
+            top: true,
+            bottom: false,
+            left: false,
+            right: true,
+            showClose: false,
+            closeDelay: 4500
+          });
+          this.loading = false;
+          this.$router.push("/app");
+        })
+        .catch(async error => {
+          this.password = "";
+          this.error = await error;
+        })
+        .finally(() => (this.loading = false));
     }
   }
 };

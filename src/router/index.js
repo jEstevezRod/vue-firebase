@@ -1,39 +1,92 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
+import Vue from "vue";
+import VueRouter from "vue-router";
+import store from "../store";
 
-Vue.use(VueRouter)
+Vue.use(VueRouter);
 
-  const routes = [
+const routes = [
   {
-    path: '/',
-    name: 'Home',
-    component: Home
+    path: "/",
+    name: "",
+    component: Vue.component("Public", () => import("../layouts/Public.vue")),
+    children: [
+      {
+        path: "",
+        name: "Home",
+        component: Vue.component("Home", () => import("../views/Home.vue")),
+      },
+      {
+        path: "about",
+        name: "About",
+        component: Vue.component("About", () => import("../views/About.vue")),
+      },
+      {
+        path: "login",
+        name: "Login",
+        component: Vue.component("Login", () => import("../views/Login.vue")),
+      },
+      {
+        path: "register",
+        name: "Register",
+        component: Vue.component("Register", () =>
+          import("../views/Register.vue")
+        ),
+      },
+    ],
   },
   {
-    path: '/about',
-    name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
+    path: "/app",
+    name: "",
+    component: Vue.component("Registered", () =>
+      import("../layouts/Registered.vue")
+    ),
+    meta: {
+      authRequired: true,
+    },
+    children: [
+      {
+        path: "",
+        name: "Dashboard",
+        component: Vue.component("Dashboard", () =>
+          import("../views/Dashboard.vue")
+        ),
+      },
+    ],
   },
-  {
-    path: '/login',
-    name: 'Login',
-    component: () => import('../views/Login.vue')
-  },
-  {
-    path: '/register',
-    name: 'Register',
-    component: () => import('../views/Register.vue')
-  }
-]
+];
 
 const router = new VueRouter({
-  mode: 'history',
+  mode: "history",
   base: process.env.BASE_URL,
-  routes
-})
+  routes,
+  linkActiveClass: "active",
+  linkExactActiveClass: "exact-active",
+});
 
-export default router
+router.beforeEach(async (to, from, next) => {
+  await store.dispatch("isLoggedIn");
+  if (to.matched.some((record) => record.meta.authRequired)) {
+    if (!store.state.LOGGED_IN) {
+      next({
+        path: "/login",
+        query: { redirect: to.fullPath },
+      });
+    } else {
+      next();
+    }
+  } else {
+    if (to.name == "Login" || to.name == "Register") {
+      if (store.state.LOGGED_IN) {
+        next({
+          path: "/app",
+        });
+      } else {
+        next();
+      }
+    } else {
+      next();
+    }
+  }
+});
+
+export default router;

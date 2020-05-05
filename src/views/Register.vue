@@ -2,115 +2,124 @@
   <div class="container mx-auto">
     <h1 class="text-center text-2xl mt-10">Register</h1>
     <div class="flex justify-center">
-      <form class="max-w-screen-md" @submit.prevent="register">
-        <section class="flex flex-col justify-center items-center">
-          <div class="my-3 w-full">
-            <label class="block text-green-400 text-sm mb-2" for="username">Email</label>
-            <input
-              class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              id="name"
-              type="text"
-              placeholder="Name"
-              name="name"
-              v-model="name"
-              autocomplete="false"
-            />
+      <section class="flex flex-col justify-center items-center w-full">
+        <div class="my-3 w-2/3 lg:w-1/3">
+          <label class="block text-gray-700 mb-2" for="name">Name</label>
+          <input
+            class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            id="name"
+            type="text"
+            placeholder="Evan You"
+            name="name"
+            @change="errors.name = []"
+            v-model="name"
+            autocomplete="false"
+          />
+          <div v-if="errors.name.length > 0" class="mt-4 bg-red-200 px-3 py-3 rounded">
+            <ul>
+              <li
+                v-for="(error, index) of errors.name"
+                :key="index"
+                class="text-red-500 text-sm"
+              >{{ error }}</li>
+            </ul>
           </div>
-          <div class="my-3 w-full">
-            <label class="block text-green-400 text-sm mb-2" for="username">Email</label>
-            <input
-              class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              id="email"
-              type="email"
-              placeholder="Email"
-              name="email"
-              @focus="errors.email = []"
-              v-model="email"
-              autocomplete="false"
-            />
-            <div v-if="errors.email.length > 0">
-              <ul>
-                <li
-                  v-for="(error, index) of errors.email"
-                  :key="index"
-                  class="text-red-500 text-sm"
-                >{{ error }}</li>
-              </ul>
-            </div>
+        </div>
+        <div class="my-3 w-2/3 lg:w-1/3">
+          <label class="block text-gray-700 mb-2" for="username">Email</label>
+          <input
+            class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            id="email"
+            type="email"
+            placeholder="example@domain.com"
+            name="email"
+            @change="errors.email = []"
+            v-model="email"
+            autocomplete="false"
+          />
+          <div v-if="errors.email.length > 0" class="mt-4 bg-red-200 px-3 py-3 rounded">
+            <ul>
+              <li
+                v-for="(error, index) of errors.email"
+                :key="index"
+                class="text-red-500 text-sm"
+              >{{ error }}</li>
+            </ul>
           </div>
-          <div class="my-3">
-            <label class="block text-green-400 text-sm mb-2" for="password">Password</label>
-            <input
-              class="appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
-              id="password"
-              type="password"
-              @focus="errors.password = []"
-              name="password"
-              placeholder="************"
-              autocomplete="false"
-              v-model="password"
-            />
-            <div v-if="errors.password.length > 0">
-              <ul>
-                <li
-                  v-for="(error, index) of errors.password"
-                  :key="index"
-                  class="text-red-500 text-sm"
-                >{{ error }}</li>
-              </ul>
-            </div>
+        </div>
+        <div class="my-3 w-2/3 lg:w-1/3">
+          <label class="block text-gray-700 mb-2" for="password">Password</label>
+          <input
+            class="appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+            id="password"
+            type="password"
+            @change="errors.password = []"
+            name="password"
+            placeholder="************"
+            autocomplete="false"
+            v-model="password"
+          />
+          <div v-if="errors.password.length > 0" class="bg-red-200 px-3 py-3 rounded">
+            <ul>
+              <li
+                v-for="(error, index) of errors.password"
+                :key="index"
+                class="text-red-500 text-sm"
+              >{{ error }}</li>
+            </ul>
           </div>
-          <div class="my-3">
-            <label class="block text-green-400 text-sm mb-2" for="password">Repeat password</label>
-            <input
-              class="appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
-              id="password2"
-              type="password"
-              name="password2"
-              @focus="errors.password2 = []"
-              placeholder="************"
-              v-model="password2"
-              autocomplete="false"
-              vid="password2"
-            />
-            <div v-if="errors.password2.length > 0">
-              <ul>
-                <li
-                  v-for="(error, index) of errors.password2"
-                  :key="index"
-                  class="text-red-500 text-sm"
-                >{{ error }}</li>
-              </ul>
-            </div>
+        </div>
+        <div class="my-3 w-2/3 lg:w-1/3">
+          <label class="block text-gray-700 mb-2" for="password">Repeat password</label>
+          <input
+            class="appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+            id="password2"
+            type="password"
+            name="password2"
+            @change="errors.password2 = []"
+            @keydown.enter="register"
+            placeholder="************"
+            v-model="password2"
+            autocomplete="false"
+            vid="password2"
+          />
+          <div v-if="errors.password2.length > 0" class="bg-red-200 px-3 py-3 rounded mb-3">
+            <ul>
+              <li
+                v-for="(error, index) of errors.password2"
+                :key="index"
+                class="text-red-500 text-sm"
+              >* {{ error }}</li>
+            </ul>
           </div>
-          <div v-if="!loading" class="flex items-center justify-between w-full">
-            <button
-              class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-              type="submit"
-            >Sign up</button>
-            <router-link
-              class="inline-block align-baseline text-sm text-black hover:text-green-400"
-              to="/login"
-            >Do you already account? Sign in</router-link>
-          </div>
-          <div v-else class="flex items-center justify-between w-full">
-            <p class="text-md text-red-500 py-2">Creating user...</p>
-          </div>
-        </section>
-      </form>
+        </div>
+        <div v-if="!loading" class="flex items-center justify-between w-2/3 lg:w-1/3">
+          <button
+            class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            @click="register"
+          >Sign up</button>
+          <router-link
+            class="inline-block align-baseline text-sm text-black hover:text-green-400"
+            to="/login"
+          >Do you already account? Sign in</router-link>
+        </div>
+       
+         <div v-else class="w-2/3 lg:w-1/3 bg-blue-200 rounded px-3 py-4">
+          <p class="text-md text-blue-800">Creating user...</p>
+        </div>
+      </section>
     </div>
   </div>
 </template>
 
 <script>
-import firebase from "firebase";
 export default {
   data: () => ({
     name: "",
     email: "",
     password: "",
     password2: "",
-    errors: { email: [], password: [], password2: [] },
+    errors: { name: [], email: [], password: [], password2: [] },
     isValid: false,
     loading: false,
     // eslint-disable-next-line
@@ -120,47 +129,43 @@ export default {
     register() {
       if (this.validateForm()) {
         this.loading = true;
-        firebase
-          .auth()
-          .createUserWithEmailAndPassword(this.email, this.password)
-          .then(data => {
-            data.user
-              .updateProfile({
-                displayName: this.name
-              })
-              .then(() => {
-                this.$notify({
-                  message: "Registration successfully!",
-                  type: "success",
-                  top: true,
-                  bottom: false,
-                  left: false,
-                  right: true,
-                  showClose: false,
-                  closeDelay: 4500
-                });
-                this.email = "";
-                this.password = "";
-                this.password2 = "";
-                this.loading = false;
-                this.$router.push("/login");
-              });
+        this.$store
+          .dispatch("register", {
+            email: this.email,
+            name: this.name,
+            password: this.password
           })
-          .catch(function(error) {
-            var errorCode = error.code;
-            var errorMessage = error.message;
-            console.error(errorCode);
-            console.error(errorMessage);
+          .then(() => {
+            this.$notify({
+              message: "Registration successfully!",
+              type: "success",
+              top: true,
+              bottom: false,
+              left: false,
+              right: true,
+              showClose: false,
+              closeDelay: 4500
+            });
+            this.name = "";
+            this.email = "";
+            this.password = "";
+            this.password2 = "";
+            this.loading = false;
+            this.$router.push("/login");
           });
       }
     },
     validateForm() {
       if (
+        this.errors.email.name > 0 ||
         this.errors.email.length > 0 ||
         this.errors.password.length > 0 ||
         this.errors.password2.length > 0
       ) {
-        this.errors = { email: [], password: [], password2: [] };
+        this.errors = { name: [], email: [], password: [], password2: [] };
+      }
+      if (this.name.length === 0) {
+        this.errors["name"] = [...this.errors.name, ...["Name is required."]];
       }
       if (this.email.length === 0) {
         this.errors["email"] = [
@@ -177,7 +182,7 @@ export default {
       if (this.password.length === 0) {
         this.errors["password"] = [
           ...this.errors.password,
-          ...["Passwords are required."]
+          ...["Password are required."]
         ];
       }
       if (this.password.length < 6) {
@@ -195,7 +200,7 @@ export default {
       if (this.password2.length === 0) {
         this.errors["password2"] = [
           ...this.errors.password2,
-          ...["Passwords are required."]
+          ...["Password are required."]
         ];
       }
       if (this.password2.length < 6) {

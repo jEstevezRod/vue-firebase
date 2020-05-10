@@ -1,8 +1,8 @@
 <template>
   <header class="py-6">
-    <nav class="w-screen flex">
+    <nav  class="w-screen flex">
       <div class="w-auto" style="flex: 1 1 0px"></div>
-      <div style="flex: 1 1 0px" class="flex justify-center items-center">
+      <div id="main-header" style="flex: 1 1 0px" class="flex justify-center items-center">
         <ul class="flex">
           <router-link
             class="text-gray-300 hover:text-gray-800 text-lg text-bold mr-12 cursor-pointer"
@@ -48,7 +48,7 @@
                 <button
                   class="text-blue-700 font-semibold py-2 px-3 rounded inline-flex items-center"
                 >
-                  <span class="mr-1">{{user.displayName}}</span>
+                  <span class="mr-1">{{ user.name === null ? user.email : user.name}}</span>
                   <svg
                     class="fill-current h-4 w-4"
                     xmlns="http://www.w3.org/2000/svg"
@@ -64,10 +64,10 @@
                   style="min-width:150px"
                 >
                   <li class="bg-white rounded">
-                    <a
+                    <router-link
                       class="rounded hover:bg-gray-300 py-3 px-4 block whitespace-no-wrap"
-                      href="#"
-                    >Profile</a>
+                      to="/app/profile"
+                    >Profile</router-link>
                   </li>
                   <li class="bg-white rounded">
                     <a

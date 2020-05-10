@@ -4,28 +4,6 @@
     <div class="flex justify-center">
       <section class="flex flex-col justify-center items-center w-full">
         <div class="my-3 w-2/3 lg:w-1/3">
-          <label class="block text-gray-700 mb-2" for="name">Name</label>
-          <input
-            class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            id="name"
-            type="text"
-            placeholder="Evan You"
-            name="name"
-            @change="errors.name = []"
-            v-model="name"
-            autocomplete="false"
-          />
-          <div v-if="errors.name.length > 0" class="mt-4 bg-red-200 px-3 py-3 rounded">
-            <ul>
-              <li
-                v-for="(error, index) of errors.name"
-                :key="index"
-                class="text-red-500 text-sm"
-              >{{ error }}</li>
-            </ul>
-          </div>
-        </div>
-        <div class="my-3 w-2/3 lg:w-1/3">
           <label class="block text-gray-700 mb-2" for="username">Email</label>
           <input
             class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -103,8 +81,8 @@
             to="/login"
           >Do you already account? Sign in</router-link>
         </div>
-       
-         <div v-else class="w-2/3 lg:w-1/3 bg-blue-200 rounded px-3 py-4">
+
+        <div v-else class="w-2/3 lg:w-1/3 bg-blue-200 rounded px-3 py-4">
           <p class="text-md text-blue-800">Creating user...</p>
         </div>
       </section>
@@ -115,16 +93,20 @@
 <script>
 export default {
   data: () => ({
-    name: "",
     email: "",
     password: "",
     password2: "",
-    errors: { name: [], email: [], password: [], password2: [] },
+    errors: { email: [], password: [], password2: [] },
     isValid: false,
     loading: false,
     // eslint-disable-next-line
     emailRegex: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
   }),
+  mounted() {
+    if (this.$store.state.LOGGED_IN) {
+      this.$router.push("/app");
+    }
+  },
   methods: {
     register() {
       if (this.validateForm()) {
@@ -132,7 +114,6 @@ export default {
         this.$store
           .dispatch("register", {
             email: this.email,
-            name: this.name,
             password: this.password
           })
           .then(() => {
@@ -163,9 +144,6 @@ export default {
         this.errors.password2.length > 0
       ) {
         this.errors = { name: [], email: [], password: [], password2: [] };
-      }
-      if (this.name.length === 0) {
-        this.errors["name"] = [...this.errors.name, ...["Name is required."]];
       }
       if (this.email.length === 0) {
         this.errors["email"] = [

@@ -51,6 +51,13 @@ const routes = [
           import("../views/Dashboard.vue")
         ),
       },
+      {
+        path: "profile",
+        name: "Profile",
+        component: Vue.component("Profile", () =>
+          import("../views/Profile.vue")
+        ),
+      },
     ],
   },
 ];
@@ -64,7 +71,7 @@ const router = new VueRouter({
 });
 
 router.beforeEach(async (to, from, next) => {
-  await store.dispatch("isLoggedIn");
+  // await store.dispatch("isLoggedIn");
   if (to.matched.some((record) => record.meta.authRequired)) {
     if (!store.state.LOGGED_IN) {
       next({
@@ -74,19 +81,10 @@ router.beforeEach(async (to, from, next) => {
     } else {
       next();
     }
-  } else {
-    if (to.name == "Login" || to.name == "Register") {
-      if (store.state.LOGGED_IN) {
-        next({
-          path: "/app",
-        });
-      } else {
-        next();
-      }
-    } else {
-      next();
-    }
   }
+  next()
+
+  
 });
 
 export default router;

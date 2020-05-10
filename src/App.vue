@@ -1,11 +1,30 @@
 <template>
-  <div id="app" class="min-h-screen">
+  <div v-if="firebaseLoaded" id="app" class="min-h-screen">
     <router-view />
   </div>
 </template>
 <script>
-
 export default {
+  data: () => ({
+    firebaseLoaded: false
+  }),
+  computed: {
+    loggedIn() {
+      return this.$store.state.LOGGED_IN;
+    }
+  },
+  watch: {
+    loggedIn() {
+      if (
+        typeof this.loggedIn == "object" ||
+        typeof this.loggedIn == "boolean"
+      ) {
+        this.firebaseLoaded = true;
+      } else {
+        this.firebaseLoaded = false;
+      }
+    }
+  }
 };
 </script>
 <style lang="scss">

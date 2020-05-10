@@ -11,8 +11,25 @@ export default new Vuex.Store({
     user: null,
   },
   mutations: {
-    SET_USER_DATA: (state, user) => (state.user = user),
+    SET_USER_DATA: (state, user) => {
+      if (typeof user == "object" && Object.keys(user).length > 0) {
+        state.user = {
+          uid: user.uid,
+          name: user.name,
+          phoneNumber: user.phoneNumber,
+          email: user.email,
+          photoUrl: user.photoUrl,
+          role: user.role,
+          createdAt: user.createdAt,
+          updatedAt: user.updatedAt,
+        };
+      } else {
+        state.user = null
+      }
+    },
     SET_LOG_IN: (state, loginStatus) => (state.LOGGED_IN = loginStatus),
+    UPDATE_USER: (state, payload) =>
+      (state.user = { ...state.user, ...payload }),
   },
   actions: {
     register: ({ commit }, payload) => {
@@ -20,15 +37,9 @@ export default new Vuex.Store({
         firebase
           .auth()
           .createUserWithEmailAndPassword(payload.email, payload.password)
-          .then((data) => {
-            data.user
-              .updateProfile({
-                displayName: payload.name,
-              })
-              .then((res) => {
-                commit("SET_USER_DATA", res);
-                resolve();
-              });
+          .then(({ user }) => {
+            commit("SET_USER_DATA", user);
+            resolve();
           })
           .catch(function(error) {
             var errorCode = error.code;
@@ -38,7 +49,6 @@ export default new Vuex.Store({
           });
       });
     },
-
     login: ({ commit }, payload) => {
       return new Promise((resolve, reject) => {
         firebase
@@ -61,29 +71,24 @@ export default new Vuex.Store({
       });
     },
     logout: ({ commit }) => {
-      return new Promise((resolve, reject) => {
+      return new Promise((resolve) => {
         firebase
           .auth()
           .signOut()
-          .then((data) => {
-            console.log("success in logout");
-            console.log(data);
+          .then(() => {
             commit("SET_LOG_IN", false);
-            commit("SET_USER_DATA", null);
+            commit("SET_USER_DATA", {});
             resolve();
-          })
-          .catch(function(error) {
-            console.error(error);
-            reject();
           });
       });
     },
-    isLoggedIn: async  ({ commit }) => {
+    isLoggedIn: async ({ commit }) => {
       try {
         await new Promise((resolve, reject) =>
           firebase.auth().onAuthStateChanged(
             (user) => {
               if (user) {
+                commit("SET_LOG_IN", true);
                 commit("SET_USER_DATA", user);
                 resolve();
               } else {
@@ -97,6 +102,37 @@ export default new Vuex.Store({
       } catch (error) {
         return false;
       }
+    },
+    getUserData: ({ commit }, uid) => {
+      return new Promise(() => {
+        firebase
+          .firestore()
+          .collection("users")
+          .doc(uid)
+          .onSnapshot((doc) => {
+            console.log("User synchronized");
+            commit("SET_USER_DATA", doc.data());
+          });
+      });
+    },
+    updateUser: ({ commit }, userData) => {
+      return new Promise((resolve, reject) => {
+        let userRef = firebase
+          .firestore()
+          .collection("users")
+          .doc(userData.uid);
+        delete userData.uid;
+        userRef
+          .update(userData)
+          .then(() => {
+            commit("UPDATE_USER", userData);
+            resolve();
+          })
+          .catch((error) => {
+            console.error(error);
+            reject();
+          });
+      });
     },
   },
   modules: {},

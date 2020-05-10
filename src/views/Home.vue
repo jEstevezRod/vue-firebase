@@ -11,7 +11,7 @@
         <br />
         <p
           class="text-center md:text-left md:text-2xl lg:text-2xl md:text-white text-blue-800"
-        >Let's figure out</p>
+        >Let's find out</p>
         <div class="mt-10 flex justify-center">
           <router-link class="bg-green-400 hover:bg-green-600 px-5 py-3 rounded" to="/login">Get started</router-link>
         </div>

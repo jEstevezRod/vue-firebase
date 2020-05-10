@@ -57,6 +57,11 @@ export default {
     loading: false,
     error: null
   }),
+  mounted() {
+      if (this.$store.state.LOGGED_IN) {
+        this.$router.push("/app");
+      } 
+  },
   methods: {
     login() {
       this.loading = true;

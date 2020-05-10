@@ -1,0 +1,32 @@
+#main-header .exact-active.active {
+  animation: bounce-6 1s;
+  padding: 8px 12px;
+  background: #ffe100;
+  color: rgba(45, 55, 72);
+  transform: rotate(-4deg);
+  border-radius: 3px;
+}
+
+@keyframes bounce-6 {
+  0% {
+    transform: scale(1, 1) translateY(0);
+  }
+  10% {
+    transform: scale(1.1, 0.9) translateY(0);
+  }
+  30% {
+    transform: scale(0.9, 1.1) translateY(-15px);
+  }
+  50% {
+    transform: scale(1.05, 0.95) translateY(0);
+  }
+  57% {
+    transform: scale(1, 1) translateY(-7px);
+  }
+  64% {
+    transform: scale(1, 1) translateY(0) rotate(-4deg);
+  }
+  100% {
+    transform: rotate(-4deg);
+  }
+}

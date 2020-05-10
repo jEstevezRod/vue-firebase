@@ -1,13 +1,12 @@
 <template>
-  <h1>Dashboard</h1>
+  <div class="container mx-auto">
+    <h1 class="text-2xl">Dashboard</h1>
+  </div>
 </template>
 
 <script>
-export default {
-
-}
+export default {};
 </script>
 
 <style>
-
 </style>

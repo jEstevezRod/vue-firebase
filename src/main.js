@@ -9,6 +9,14 @@ require('@/plugins/firebase.js');
 // Import main styles file including tailwind
 import '@/assets/styles/main.css'
 import VueNotification from '@mathieustan/vue-notification';
+// Font awesome icons
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { faPencilAlt } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+
+library.add(faPencilAlt)
+Vue.component('font-awesome-icon', FontAwesomeIcon)
+
 
 Vue.use(VueNotification);
 Vue.config.productionTip = false
@@ -20,11 +28,10 @@ new Vue({
   created () {
     firebase.auth().onAuthStateChanged((firebaseUser) => {
       if (firebaseUser) {
-        console.log('LOGGED_IN')
         store.commit("SET_LOG_IN", true);
-        store.commit("SET_USER_DATA", firebaseUser);
+        store.dispatch('getUserData', firebaseUser.uid)
       }else {
-        console.log('LOGGED_OUT')
+        store.commit("SET_LOG_IN", false);
       }
     })
   }

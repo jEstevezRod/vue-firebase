@@ -7,6 +7,10 @@
   border-radius: 3px;
 }
 
+.cus-font-title {
+  font-family: 'Source Code Pro', monospace;
+  }
+
 @keyframes bounce-6 {
   0% {
     transform: scale(1, 1) translateY(0);

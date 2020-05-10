@@ -1,5 +1,5 @@
 <template>
-  <div class="h-screen bg-gray-200">
+  <div class="min-h-screen bg-gray-100">
       <Navbar :dark="true" />
     <router-view></router-view>
   </div>

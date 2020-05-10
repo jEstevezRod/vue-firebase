@@ -1,5 +1,5 @@
 <template>
-  <div v-if="firebaseLoaded" id="app" class="min-h-screen">
+  <div v-if="firebaseLoaded" id="app" class="min-h-screen h-full">
     <router-view />
   </div>
 </template>

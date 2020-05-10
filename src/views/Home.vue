@@ -1,5 +1,5 @@
 <template>
-  <div class="app">
+  <div>
     <main class="flex w-full flex-wrap mt-24">
       <div class="w-full md:w-1/2 flex justify-center items-center">
         <img src="@/assets/images/island.svg" style="max-width: 500px;width:100%" />

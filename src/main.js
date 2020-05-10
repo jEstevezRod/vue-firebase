@@ -12,9 +12,16 @@ import VueNotification from '@mathieustan/vue-notification';
 // Font awesome icons
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faPencilAlt } from '@fortawesome/free-solid-svg-icons'
+import { faUserPlus } from '@fortawesome/free-solid-svg-icons'
+import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons'
+import { faEdit } from '@fortawesome/free-solid-svg-icons'
+import { faChartLine } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import Trend from "vuetrend"
 
-library.add(faPencilAlt)
+Vue.use(Trend)
+
+library.add(faPencilAlt, faUserPlus, faSignOutAlt, faEdit, faChartLine)
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 
 
